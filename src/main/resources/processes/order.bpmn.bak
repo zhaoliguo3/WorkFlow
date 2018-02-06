@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1516692503394" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="order" isClosed="false" isExecutable="true" processType="None">
+    <startEvent id="start" name="StartEvent"/>
+    <userTask activiti:assignee="${worker}" activiti:async="true" activiti:exclusive="true" id="worker" name="填写提交维保单"/>
+    <userTask activiti:assignee="${confirmor}" activiti:async="true" activiti:exclusive="true" id="confirmor" name="确认维保单"/>
+    <userTask activiti:assignee="${weibaoService.getMaintenance()}" activiti:async="true" activiti:exclusive="true" id="maintenance" name="维保班长审核维保单"/>
+    <userTask activiti:assignee="${weibaoService.getProperty()}" activiti:async="true" activiti:exclusive="true" id="property" name="物业审核维保单"/>
+    <endEvent id="end" name="EndEvent"/>
+    <sequenceFlow id="_8" sourceRef="start" targetRef="worker"/>
+    <sequenceFlow id="_10" sourceRef="confirmor" targetRef="maintenance">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message.equals("审核通过")}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_11" sourceRef="maintenance" targetRef="property">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message.equals("审核通过")}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_12" sourceRef="property" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message.equals("审核通过")}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_13" sourceRef="property" targetRef="worker">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message.equals("审核不通过")}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_14" sourceRef="maintenance" targetRef="worker">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message.equals("审核不通过")}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_15" sourceRef="confirmor" targetRef="worker">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${message.equals("审核不通过")}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_2" sourceRef="worker" targetRef="confirmor">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${confirmor!=null}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_3" sourceRef="worker" targetRef="maintenance">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${confirmor==null}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="order">
+      <bpmndi:BPMNShape bpmnElement="start" id="Shape-start">
+        <omgdc:Bounds height="32.0" width="32.0" x="395.0" y="10.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="worker" id="Shape-worker">
+        <omgdc:Bounds height="55.0" width="85.0" x="370.0" y="105.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="confirmor" id="Shape-confirmor">
+        <omgdc:Bounds height="55.0" width="85.0" x="365.0" y="210.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="maintenance" id="Shape-maintenance">
+        <omgdc:Bounds height="55.0" width="85.0" x="370.0" y="310.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="property" id="Shape-property">
+        <omgdc:Bounds height="55.0" width="85.0" x="370.0" y="410.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="Shape-end">
+        <omgdc:Bounds height="32.0" width="32.0" x="395.0" y="525.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_13" id="BPMNEdge__13" sourceElement="property" targetElement="worker">
+        <omgdi:waypoint x="370.0" y="437.5"/>
+        <omgdi:waypoint x="250.0" y="280.0"/>
+        <omgdi:waypoint x="370.0" y="132.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="-20.0" width="0.0" x="0.0" y="5.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_12" id="BPMNEdge__12" sourceElement="property" targetElement="end">
+        <omgdi:waypoint x="411.0" y="465.0"/>
+        <omgdi:waypoint x="411.0" y="525.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15" id="BPMNEdge__15" sourceElement="confirmor" targetElement="worker">
+        <omgdi:waypoint x="450.0" y="237.5"/>
+        <omgdi:waypoint x="550.0" y="185.0"/>
+        <omgdi:waypoint x="455.0" y="132.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="5.0" width="0.0" x="0.0" y="-15.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_14" id="BPMNEdge__14" sourceElement="maintenance" targetElement="worker">
+        <omgdi:waypoint x="455.0" y="337.5"/>
+        <omgdi:waypoint x="505.0" y="243.0"/>
+        <omgdi:waypoint x="455.0" y="132.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="1.0" width="100.0" x="-1.0" y="28.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_2" id="BPMNEdge__2" sourceElement="worker" targetElement="confirmor">
+        <omgdi:waypoint x="410.0" y="160.0"/>
+        <omgdi:waypoint x="410.0" y="210.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_3" id="BPMNEdge__3" sourceElement="worker" targetElement="maintenance">
+        <omgdi:waypoint x="370.0" y="132.5"/>
+        <omgdi:waypoint x="310.0" y="225.0"/>
+        <omgdi:waypoint x="370.0" y="337.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="start" targetElement="worker">
+        <omgdi:waypoint x="411.0" y="42.0"/>
+        <omgdi:waypoint x="411.0" y="105.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_11" id="BPMNEdge__11" sourceElement="maintenance" targetElement="property">
+        <omgdi:waypoint x="412.5" y="365.0"/>
+        <omgdi:waypoint x="412.5" y="410.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_10" id="BPMNEdge__10" sourceElement="confirmor" targetElement="maintenance">
+        <omgdi:waypoint x="410.0" y="265.0"/>
+        <omgdi:waypoint x="410.0" y="310.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
